@@ -27,12 +27,12 @@ class Mysql
     min = array_episodes.reduce(100){|memo,curr| memo < curr['vue'] ? memo : curr['vue']}
     array_episodes
         .select { |episode| episode['vue'] == min }
-        .shuffle[0..number]
+        .shuffle[0..number-1]
         .each do |episode|
-      puts " - #{episode['name']}"
+      puts " - #{episode['path'].split('/')[-1].split('.')[0]}"
     end.each do |episode|
       puts "** ======================= #{episode['path'].rjust(20,' ')} ============================================ **"
-      `vlc --play-and-exit #{episode['path'].inspect}`
+      `cvlc --play-and-exit #{episode['path'].inspect}`
       con.query("UPDATE DeuxMinutes SET vue=#{episode['vue'].to_i+1} WHERE path=#{episode['path'].inspect}")
     end
   end
